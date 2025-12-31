@@ -351,7 +351,10 @@ export function checkForSchemaChanges(
 	// if sheet does not contain ROW_NUMBER ignore it as data come from read rows operation
 	const schemaColumns = columnNames.includes(ROW_NUMBER)
 		? schema.map((s) => s.id)
-		: schema.filter((s) => s.id !== ROW_NUMBER).map((s) => s.id);
+		: schema.reduce<string[]>((acc, s) => {
+				if (s.id !== ROW_NUMBER) acc.push(s.id);
+				return acc;
+			}, []);
 
 	for (const [columnIndex, columnName] of columnNames.entries()) {
 		const schemaEntry = schemaColumns[columnIndex];

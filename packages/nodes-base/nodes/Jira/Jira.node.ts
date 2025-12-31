@@ -772,7 +772,7 @@ export class Jira implements INodeType {
 						// Use rendered fields if requested and available
 						qs.expand = qs.expand || '';
 						if (
-							(qs.expand as string).toLowerCase().indexOf('renderedfields') !== -1 &&
+							(qs.expand as string).toLowerCase().includes('renderedfields') &&
 							responseData.renderedFields &&
 							Object.keys(responseData.renderedFields as IDataObject[]).length
 						) {

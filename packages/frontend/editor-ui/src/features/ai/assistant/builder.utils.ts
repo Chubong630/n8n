@@ -96,7 +96,12 @@ export function shouldShowChat(routeName: string): boolean {
  * Only extracts from messages that have a string revertVersionId property.
  */
 export function extractRevertVersionIds(messages: ChatRequest.MessageResponse[]): string[] {
-	return messages.filter(hasRevertVersionId).map((msg) => msg.revertVersionId);
+	return messages.reduce<string[]>((acc, msg) => {
+		if (hasRevertVersionId(msg)) {
+			acc.push(msg.revertVersionId);
+		}
+		return acc;
+	}, []);
 }
 
 /**

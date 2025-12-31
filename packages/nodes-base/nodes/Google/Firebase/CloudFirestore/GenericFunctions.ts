@@ -91,7 +91,7 @@ export function jsonToDocument(value: string | number | IDataObject | IDataObjec
 	} else if (value === null) {
 		return { nullValue: null };
 	} else if (value !== '' && !isNaN(value as number)) {
-		if (value.toString().indexOf('.') !== -1) {
+		if (value.toString().includes('.')) {
 			return { doubleValue: value };
 		} else {
 			return { integerValue: value };

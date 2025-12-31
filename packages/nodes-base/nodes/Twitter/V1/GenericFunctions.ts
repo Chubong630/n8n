@@ -92,7 +92,7 @@ export async function uploadAttachments(
 		const binaryData = this.helpers.assertBinaryData(i, binaryPropertyName);
 		const dataBuffer = await this.helpers.getBinaryDataBuffer(i, binaryPropertyName);
 
-		const isAnimatedWebp = dataBuffer.toString().indexOf('ANMF') !== -1;
+		const isAnimatedWebp = dataBuffer.toString().includes('ANMF');
 		const isImage = binaryData.mimeType.includes('image');
 
 		if (isImage && isAnimatedWebp) {

@@ -184,7 +184,12 @@ export class AwsSecretsManager extends SecretsProvider {
 			});
 
 			if (response.SecretList) {
-				names.push(...response.SecretList.filter((s) => s.Name).map((s) => s.Name!));
+				names.push(
+					...response.SecretList.reduce<string[]>((acc, s) => {
+						if (s.Name) acc.push(s.Name);
+						return acc;
+					}, []),
+				);
 			}
 
 			nextToken = response.NextToken;

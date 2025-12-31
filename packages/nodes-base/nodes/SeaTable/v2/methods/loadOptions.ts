@@ -215,7 +215,7 @@ export async function getRowIds(this: ILoadOptionsFunctions): Promise<INodePrope
 	const operation = this.getCurrentNodeParameter('operation') as string;
 	let tableName = table;
 
-	if (table.indexOf(':::') !== -1) {
+	if (table.includes(':::')) {
 		tableName = table.split(':::')[0];
 	}
 

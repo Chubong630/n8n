@@ -989,7 +989,10 @@ export class WorkflowDataProxy {
 				throw results[0].error;
 			}
 
-			const matchedItems = results.filter((result) => result.ok).map((result) => result.result);
+			const matchedItems = results.reduce<number[]>((acc, result) => {
+				if (result.ok) acc.push(result.result);
+				return acc;
+			}, []);
 
 			if (matchedItems.length === 0) {
 				if (sourceArray.length === 0) throw createNoConnectionError(destinationNodeName);

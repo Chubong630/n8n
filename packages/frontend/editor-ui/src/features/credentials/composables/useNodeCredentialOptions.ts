@@ -34,10 +34,17 @@ export function useNodeCredentialOptions(
 	);
 
 	const credentialTypesNodeDescriptionDisplayed = computed(() =>
-		credentialTypesNodeDescriptions.value.filter(displayCredentials).map((type) => ({
-			type,
-			options: getCredentialOptions(getAllRelatedCredentialTypes(type)),
-		})),
+		credentialTypesNodeDescriptions.value.reduce<
+			{ type: INodeCredentialDescription; options: CredentialDropdownOption[] }[]
+		>((acc, type) => {
+			if (displayCredentials(type)) {
+				acc.push({
+					type,
+					options: getCredentialOptions(getAllRelatedCredentialTypes(type)),
+				});
+			}
+			return acc;
+		}, []),
 	);
 
 	const areAllCredentialsSet = computed(() =>
