@@ -368,13 +368,17 @@ export class WorkflowRepository extends Repository<WorkflowEntity> {
 	}
 
 	private getFolderIds(workflowsAndFolders: WorkflowFolderUnionRow[]) {
-		return workflowsAndFolders.filter((item) => item.resource === 'folder').map((item) => item.id);
+		return workflowsAndFolders.reduce<string[]>((acc, item) => {
+			if (item.resource === 'folder') acc.push(item.id);
+			return acc;
+		}, []);
 	}
 
 	private getWorkflowsIds(workflowsAndFolders: WorkflowFolderUnionRow[]) {
-		return workflowsAndFolders
-			.filter((item) => item.resource === 'workflow')
-			.map((item) => item.id);
+		return workflowsAndFolders.reduce<string[]>((acc, item) => {
+			if (item.resource === 'workflow') acc.push(item.id);
+			return acc;
+		}, []);
 	}
 
 	private async fetchExtraData(

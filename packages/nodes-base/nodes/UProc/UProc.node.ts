@@ -89,18 +89,17 @@ export class UProc implements INodeType {
 			[key: string]: any;
 		}
 
-		const fields = toolParameters
-			.filter((field) => {
-				return (
-					field?.displayOptions?.show?.group &&
-					field.displayOptions.show.tool &&
-					field.displayOptions.show.group.indexOf(group) !== -1 &&
-					field.displayOptions.show.tool.indexOf(tool) !== -1
-				);
-			})
-			.map((field) => {
-				return field.name;
-			});
+		const fields = toolParameters.reduce<string[]>((acc, field) => {
+			if (
+				field?.displayOptions?.show?.group &&
+				field.displayOptions.show.tool &&
+				field.displayOptions.show.group.includes(group) &&
+				field.displayOptions.show.tool.includes(tool)
+			) {
+				acc.push(field.name);
+			}
+			return acc;
+		}, []);
 
 		for (let i = 0; i < length; i++) {
 			try {

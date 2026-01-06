@@ -154,7 +154,10 @@ export function hasPath(start: string, end: string, adjacencyList: IConnectionAd
 		paths.push(
 			...difference(
 				new Set(
-					[...(adjacencyList.get(next) ?? [])].filter((x) => x.type === 'main').map((x) => x.node),
+					[...(adjacencyList.get(next) ?? [])].reduce<string[]>((acc, x) => {
+						if (x.type === 'main') acc.push(x.node);
+						return acc;
+					}, []),
 				),
 				seen,
 			),
@@ -215,7 +218,12 @@ export function parseExtractableSubgraphSelection(
 	// 0-1 Input nodes
 	const inputEdges = getInputEdges(graphIds, adjacencyList);
 	// This filters out e.g. sub-nodes, which are technically parents
-	const inputNodes = new Set(inputEdges.filter((x) => x[1].type === 'main').map((x) => x[1].node));
+	const inputNodes = new Set(
+		inputEdges.reduce<string[]>((acc, x) => {
+			if (x[1].type === 'main') acc.push(x[1].node);
+			return acc;
+		}, []),
+	);
 	let rootNodes = getRootNodes(graphIds, adjacencyList);
 
 	// this enables supporting cases where we have one input and a loop back to it from within the selection
@@ -236,7 +244,12 @@ export function parseExtractableSubgraphSelection(
 
 	// 0-1 Output nodes
 	const outputEdges = getOutputEdges(graphIds, adjacencyList);
-	const outputNodes = new Set(outputEdges.filter((x) => x[1].type === 'main').map((x) => x[0]));
+	const outputNodes = new Set(
+		outputEdges.reduce<string[]>((acc, x) => {
+			if (x[1].type === 'main') acc.push(x[0]);
+			return acc;
+		}, []),
+	);
 	let leafNodes = getLeafNodes(graphIds, adjacencyList);
 	// If we have no leaf nodes, and only one output node, we can tolerate this output node
 	// and connect to it.

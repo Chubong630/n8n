@@ -59,7 +59,7 @@ export async function woocommerceApiRequestAllItems(
 			resolveWithFullResponse: true,
 		});
 		const links = responseData.headers.link.split(',');
-		const nextLink = links.find((link: string) => link.indexOf('rel="next"') !== -1);
+		const nextLink = links.find((link: string) => link.includes('rel="next"'));
 		if (nextLink) {
 			uri = nextLink.split(';')[0].replace(/<(.*)>/, '$1');
 		}
